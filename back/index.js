@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const service = require('./service')
+var mongo = require('mongodb');
 const express = require('express')
 const app = express()
 
@@ -17,6 +18,10 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
     service.login(req, res)
+})
+
+app.post('/register', (req, res) => {
+    service.register(req, res)
 })
 
 app.listen(app.get('port'), () => {
