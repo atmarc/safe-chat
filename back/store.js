@@ -98,25 +98,35 @@ function addFriend (user1, user2, callback) {
     })
 }
 
+// User1 and user2 are userIds. Friend user2 is beeing removed from user1's frinedlist
+function removeFriend (user1, user2, callback) {
+    getUser({'_id':  ObjectId(user2)}, (res) => {
+        // Check user2 exists
+        if (res === null) throw "The specified userId " + user2 + " does not exist"
+        
+        // Get current friends and update them
+        getUser({'_id':  ObjectId(user1)}, (user) => {
+            let friends = user.friends.filter((aux) => aux != user2)
+            console.log(friends, user2)
+            updateUser({'_id': ObjectId(user1)}, {friends}, callback)
+        })
+    })
+}
+
 function printUsers () {
     allUsers((res) => console.log(res))
 } 
 
-// module.exports = {
-//     insertUser,
-//     deleteUser,
-//     userNameExists,
-//     getUser,
-//     allUsers,
-//     updateUser
-// }
+module.exports = {
+    insertUser,
+    deleteUser,
+    userNameExists,
+    getUser,
+    allUsers,
+    updateUser,
+    addFriend,
+    removeFriend
+}
 
-// addFriend(123, 234, (user) => {
-//     console.log(user)
-// })
 
-addFriend('5f171f0e18873b28b83bb296', '5f172237ebd72927f8cefc4f')
 
-// getUser({'_id': ObjectId('5f172237ebd72927f8cefc4f')}, (res) => console.log(res))
-
-printUsers()
