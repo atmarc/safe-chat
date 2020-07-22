@@ -40,12 +40,36 @@ function insertUser (username, password, callback) {
 }
 
 // Query to find the user
-function getUser (user, callback) {
+function queryUser (user, callback) {
     mongoConnect((db, close) => {
         db.collection(USERS_COLLECTION).findOne(user, function(err, result) {
             if (err) throw err
             close()
             callback(result)
+        })
+    })
+}
+
+function getUser (userId, callback) {
+    if (typeof(userId) !== "string") return 
+    mongoConnect((db, close) => {
+        db.collection(USERS_COLLECTION).findOne({'_id': ObjectId(userId)}, {projection: {password: 0}}, function(err, result) {
+            if (err) throw err
+            close()
+            callback(result)
+        })
+    })
+}
+
+function getUserPromise (userId) {
+    if (typeof(userId) !== "string") return 
+    return new Promise((resolve, reject) => {
+        mongoConnect((db, close) => {
+            db.collection(USERS_COLLECTION).findOne({'_id': ObjectId(userId)}, {projection: {password: 0}}, function(err, result) {
+                if (err) throw err
+                close()
+                resolve(result)
+            })
         })
     })
 }
@@ -62,9 +86,10 @@ function userNameExists (username, callback) {
 }
 
 // User is the query to find the user to delete
-function deleteUser (user, callback) {
+function deleteUser (userId, callback) {
+    if (typeof(userId) !== "string") return 
     mongoConnect((db, close) => {
-        db.collection(USERS_COLLECTION).deleteOne(user, function(err, obj) {
+        db.collection(USERS_COLLECTION).deleteOne({'_id': ObjectId(userId)}, function(err, obj) {
             if (err) throw err
             close()
             if (callback) callback(obj)
@@ -73,42 +98,42 @@ function deleteUser (user, callback) {
 } 
 
 // User is the query to find the user to update with the new values
-function updateUser (user, newValues, callback) {
+function updateUser (userId, newValues, callback) {
+    if (typeof(userId) !== "string") return 
     mongoConnect((db, close) => {
-        db.collection(USERS_COLLECTION).updateOne(user, {$set: newValues}, function(err, res) {
+        db.collection(USERS_COLLECTION).updateOne({'_id': ObjectId(userId)}, {$set: newValues}, function(err, res) {
             if (err) throw err
-            if (callback) callback(res)
             close()
+            if (callback) callback(res)
         })
     })
 }
 
 // User1 and user2 are userIds. User1 adds user2 as a friend
 function addFriend (user1, user2, callback) {
-    getUser({'_id':  ObjectId(user2)}, (res) => {
+    getUser(user2, (res) => {
         // Check user2 exists
         if (res === null) throw "The specified userId " + user2 + " does not exist"
         
         // Get current friends and update them
-        getUser({'_id':  ObjectId(user1)}, (user) => {
+        getUser(user1, (user) => {
             let friends = user.friends
             friends.push(user2)
-            updateUser({'_id': ObjectId(user1)}, {friends}, callback)
+            updateUser(user1, {friends}, callback)
         })
     })
 }
 
 // User1 and user2 are userIds. Friend user2 is beeing removed from user1's frinedlist
 function removeFriend (user1, user2, callback) {
-    getUser({'_id':  ObjectId(user2)}, (res) => {
+    getUser(user2, (res) => {
         // Check user2 exists
         if (res === null) throw "The specified userId " + user2 + " does not exist"
         
         // Get current friends and update them
-        getUser({'_id':  ObjectId(user1)}, (user) => {
+        getUser(user1, (user) => {
             let friends = user.friends.filter((aux) => aux != user2)
-            console.log(friends, user2)
-            updateUser({'_id': ObjectId(user1)}, {friends}, callback)
+            updateUser(user1, {friends}, callback)
         })
     })
 }
@@ -121,7 +146,9 @@ module.exports = {
     insertUser,
     deleteUser,
     userNameExists,
+    queryUser,
     getUser,
+    getUserPromise,
     allUsers,
     updateUser,
     addFriend,

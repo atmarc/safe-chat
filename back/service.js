@@ -3,9 +3,10 @@ const store = require('./store')
 function login (req, res, callback) {
     let username = req.body.username
     let password = req.body.password
-    store.getUser({username, password}, (result) => {
+    store.queryUser({username, password}, (result) => {
         // If this credentials correspond to a user
         if (result !== null) {
+            delete result.password
             res.status(200).send(result)
         } 
         else {
@@ -20,6 +21,7 @@ function register (req, res, callback) {
     store.userNameExists(username, (exists) => {
         if (!exists) {
             store.insertUser(username, password, (result) => {
+                delete result.password
                 res.status(200).send(result)
             })
         }
@@ -29,18 +31,52 @@ function register (req, res, callback) {
     })
 }
 
+function getUser (req, res, callback) {
+    store.getUserPromise(req.params.userId)
+        .then((result) => {
+            delete result.password
+            res.send(result)
+        })
+}
+
 function getUsers (req, res, callback) {
     store.allUsers((result) => res.send(result))
 }
 
 function deleteUser(req, res, callback) {
-    let username = req.body.username
-    store.deleteUser({username}, (result) => res.send(result))
+    store.deleteUser(req.params.userId, (result) => {
+        delete result.password
+        res.send(result)
+    })
+}
+
+function getUserFriends (req, res, callback) {
+    let userId = req.params.userId
+        store.getUser(userId, async function (user) {
+        let friends = user.friends
+        let returnFriends = []
+        for (let friend of friends) {
+            await store.getUserPromise(friend)
+                .then((result) => {
+                returnFriends.push({username: result.username, userId: result._id})
+            })
+        }
+        res.send(returnFriends)
+    })
+}
+
+function addFriend (req, res) {
+    let friendId = req.body.friendId
+    let userId = req.params.userId
+    store.addFriend(userId, friendId, (result) => res.send(result))
 }
 
 module.exports = {
     login,
     register,
     getUsers,
-    deleteUser
+    getUser,
+    deleteUser,
+    getUserFriends,
+    addFriend
 }

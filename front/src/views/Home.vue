@@ -1,29 +1,45 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Friends:</h1>
+    <ul>
+      <li v-for="friend in friends" :key="friend.userId">{{friend.username}}</li>
+    </ul>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
     HelloWorld
   },
-  beforeCreate () {
-    let userId, userName
+  data: function () {
+    return {
+      friends: [],
+      userId: '', 
+      username: ''
+    }
+  },
+  created () {
     try {
-      userId = localStorage.getItem('userId')
-      userName = localStorage.getItem('userName')
+      this.userId = localStorage.getItem('userId')
+      this.username = localStorage.getItem('username')
     }
     catch {
       console.log('Error accessing to localStorage!')
     }
-    if (!userId || !userName) {
+    if (!this.userId || !this.username) {
       this.$router.push('login')
+    }
+    else {
+      axios.get("http://localhost:3001/users/" + this.userId + "/friends")
+        .then((res) => {
+          this.friends = res.data
+        })
     }
   }
 }
