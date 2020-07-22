@@ -16,6 +16,14 @@ app.get('/', (req, res) => {
     res.send('api source root')
 })
 
+app.get('/users', (req, res) => {
+    service.getUsers(req, res)
+})
+
+app.delete('/users', (req, res) => {
+    service.deleteUser(req, res)
+})
+
 app.post('/login', (req, res) => {
     service.login(req, res)
 })

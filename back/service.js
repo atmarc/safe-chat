@@ -9,7 +9,7 @@ function login (req, res, callback) {
             res.status(200).send(result)
         } 
         else {
-            res.status(401)
+            res.status(401).send()
         }
     })
 }
@@ -24,12 +24,23 @@ function register (req, res, callback) {
             })
         }
         else {
-            res.status(400)
+            res.status(400).send()
         }
     })
 }
 
+function getUsers (req, res, callback) {
+    store.allUsers((result) => res.send(result))
+}
+
+function deleteUser(req, res, callback) {
+    let username = req.body.username
+    store.deleteUser({username}, (result) => res.send(result))
+}
+
 module.exports = {
     login,
-    register
+    register,
+    getUsers,
+    deleteUser
 }

@@ -34,8 +34,8 @@ function insertUser (username, password, callback) {
             if (err) throw err
             console.log('user inserted: ' + username)
             close()
-            if (callback) callback()
-        });
+            if (callback) callback(res.ops[0])
+        })
     })
 }
 
@@ -53,7 +53,7 @@ function getUser (user, callback) {
 // Check if the current username is in use
 function userNameExists (username, callback) {
     mongoConnect((db, close) => {
-        db.collection({username}).findOne(user, function(err, result) {
+        db.collection(USERS_COLLECTION).findOne({username}, function(err, result) {
             if (err) throw err
             close()
             callback(result !== null)
@@ -125,7 +125,8 @@ module.exports = {
     allUsers,
     updateUser,
     addFriend,
-    removeFriend
+    removeFriend,
+    allUsers
 }
 
 
