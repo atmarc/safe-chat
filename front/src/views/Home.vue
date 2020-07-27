@@ -1,25 +1,24 @@
 <template>
   <div class="home">
-    <h1>Friends:</h1>
-    <ul>
-      <li v-for="friend in friends" :key="friend.userId">{{friend.username}}</li>
-    </ul>
+    <friend-list :userId="userId" />
+    <chat/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import FriendList from '@/components/FriendList.vue'
+import Chat from '@/components/Chat.vue'
 import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    FriendList,
+    Chat
   },
   data: function () {
     return {
-      friends: [],
       userId: '', 
       username: ''
     }
@@ -35,12 +34,14 @@ export default {
     if (!this.userId || !this.username) {
       this.$router.push('login')
     }
-    else {
-      axios.get("http://localhost:3001/users/" + this.userId + "/friends")
-        .then((res) => {
-          this.friends = res.data
-        })
-    }
   }
 }
 </script>
+
+<style scoped>
+.home {
+  display: grid;
+  grid-template-columns: 30vw auto;
+  height: 100vh;
+}
+</style>
