@@ -39,7 +39,12 @@ export default {
 
 <style scoped>
 .friendList {
+  padding: 20px;
   height: 100%;
   width: 100%;
+  background: black;
+  color: #0F0;
+  border-color: #0F0;
+  border-style: hidden solid hidden hidden;
 }
 </style>
