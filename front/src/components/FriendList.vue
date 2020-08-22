@@ -4,6 +4,7 @@
     <div class="friendsNames" id="scroll">
       <div class="contact" v-for="friend in friends" :key="friend.userId">{{friend.username}}</div>
     </div>
+    <button v-on:click ="$emit('open-modal')">Add friend </button>
 </div>
 </template>
 

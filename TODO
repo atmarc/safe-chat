@@ -1,2 +1,7 @@
 [x] Comprovar que les funcions de service funcionen
 [x] Integrar les funcions al login de vue
+
+[] Crear vista per afegir amics
+[] Crear vista amics pendents
+[] Afegir al backend amics pendents
+[] Pensar tema de handshake de claus i encriptat de missatges
