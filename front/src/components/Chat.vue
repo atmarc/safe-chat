@@ -97,9 +97,7 @@ input {
 }
 
 
-/*
- *  STYLE 16
- */
+/* --------  Scroll bar custom -------- */
 ::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
@@ -117,6 +115,7 @@ input {
 	border-radius: 10px;
 	background-color: #0F0;
 }
+/* --------  Scroll bar custom -------- */
 
 .el-button--success {
     color: #FFF;
