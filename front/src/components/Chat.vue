@@ -1,5 +1,8 @@
 <template>
     <div class="chat">
+        <div class="chatTitle">
+            <h3>Marc</h3>
+        </div>
         <div class="messages">
             <p> Missatge </p>
             <p> Missatge </p>
@@ -34,7 +37,12 @@
             <div class="inputbox">
                 <input type="text" class="myInput" v-model="newMessage">
             </div>
-            <el-button type="success" icon="el-icon-check" circle></el-button>
+            <svg width="40" height="40">
+                <circle cx="20" cy="20" r="20" fill="#0F0" />
+                <polygon points="12,10 12,30 32,20" style="fill:#000;stroke-linejoin: round;" />
+                Sorry, your browser does not support inline SVG.
+            </svg>
+            <!-- <el-button type="success" icon="el-icon-check" circle></el-button> -->
         </div>
     </div>
 </template>
@@ -54,10 +62,16 @@ p {
     color:rgb(0, 255, 0);
 }
 .chat {
-    height: 100%;
+    height: 100vh;
     width: 100%;
     display: grid;
-    grid-template-rows: 90vh minmax(60px, 10vh);
+    grid-template-rows: auto 1fr auto;
+}
+.chatTitle {
+    padding: 20px;
+    background-color: black;
+    color: #0F0;
+    border-style: hidden hidden solid hidden;
 }
 .messages {
     /* height: 100px; */
@@ -66,15 +80,14 @@ p {
     padding: 20px;
     overflow-y: auto;
 }
-.messageInput{
+.messageInput {
     place-items: center;
     display: grid;
     width: 100%;
     background-color: rgb(0, 0, 0);
     grid-template-columns: 90% 10%;
-    
-    /* border-style: solid hidden hidden hidden;
-    border-color: #0F0; */
+    padding-top: 10px;    
+    padding-bottom: 10px;    
 }
 
 .inputbox {
