@@ -2,9 +2,18 @@
   <div class="friendList">
     <h1>Chats</h1>
     <div class="friendsNames" id="scroll">
+
       <div class="contact" v-for="friend in friends" :key="friend.userId">{{friend.username}}</div>
+
+      <div class="addButton" v-on:click ="$emit('open-modal')">
+        <div>Add friend</div>
+        <svg width="20" height="20">
+          <rect x="0" y="8" width="20" height="4" style="fill:#0F0;"/>
+          <rect x="8" y="0" width="4" height="20" style="fill:#0F0;"/>
+        </svg>
+      </div>
+
     </div>
-    <button v-on:click ="$emit('open-modal')">Add friend </button>
 </div>
 </template>
 
@@ -73,6 +82,13 @@ h1 {
   border-style: hidden solid hidden hidden;
   display: flex;
   flex-direction: column;
+}
+
+.addButton {
+  margin-top: 20px;
+  display: grid;
+  place-items: center;
+  grid-template-columns: auto 20px;
 }
 
 /* --------  Scroll bar custom -------- */

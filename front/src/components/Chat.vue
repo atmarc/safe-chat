@@ -37,7 +37,8 @@
             <div class="inputbox">
                 <input type="text" class="myInput" v-model="newMessage">
             </div>
-            <svg width="40" height="40">
+            <svg width="40" height="40"
+                    onclick="alert('Send')">
                 <path d="M 12 8 L 12 16 L 30 20 L 12 24 L 12 32 L 37 20 Z" fill="#0F0" 
                     stroke-linejoin="round" stroke-width="3" stroke="#0F0" />
                 Sorry, your browser does not support inline SVG.

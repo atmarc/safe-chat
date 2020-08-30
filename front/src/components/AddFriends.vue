@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="wrapper" v-on:click="clickWrapper" id="wrapper">
         <div class="myModal">
             <h1>Send a friend request</h1>
             <h6> Nickname: </h6>
@@ -11,19 +11,27 @@
 
 <script>
 export default {
-    name: 'AddFriends'
+    name: 'AddFriends',
+    methods: {
+        clickWrapper: function (event) {
+            if (event.target.id !== this.$el.id)
+                return
+            this.$emit('close')
+        }
+    }
 }
 </script>
 
 <style scoped>
 .myModal {
-    padding: 20px;
+    padding: 30px;
     background: black;
     color: #0F0;
     border-style: solid;
     border-color: #0F0;
     border-radius: 10px;
     opacity: 100%;
+    z-index: 1;
 }
 
 .wrapper {
@@ -36,6 +44,7 @@ export default {
     top: 0;
     display: grid;
     place-items: center;
+    z-index: 0;
 }
 
 input {

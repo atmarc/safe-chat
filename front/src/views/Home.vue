@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     openModal: function () {
-      console.log('senyal')
       this.addFriendModal = true
     },
     closeModal: function () {
